@@ -121,27 +121,40 @@ def edit_item(item_id):
 
     return render_template('edit_item.html', item=item)
 
+# routes.py
 @main_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    # Let user update username/password
     if request.method == 'POST':
         new_username = request.form.get('username')
         new_password = request.form.get('password')
-
+        
+        # Handle new username
         if new_username:
             existing_user = User.query.filter_by(username=new_username).first()
             if existing_user and existing_user.id != current_user.id:
                 flash('Username already taken by another user!')
                 return redirect(url_for('main.profile'))
-
             current_user.username = new_username
         
+        # Handle new password
         if new_password:
             current_user.password = generate_password_hash(new_password)
         
+        # Handle new avatar file
+        file = request.files.get('avatar')
+        if file and allowed_file(file.filename):  # Use your existing allowed_file() helper
+            avatar_name = secure_filename(file.filename)
+            upload_path = os.path.join(main_bp.root_path, 'static', 'uploads', avatar_name)
+            # Make sure the folder exists
+            os.makedirs(os.path.dirname(upload_path), exist_ok=True)
+            file.save(upload_path)
+            
+            # Update user's avatar_filename
+            current_user.avatar_filename = avatar_name
+
         db.session.commit()
         flash('Profile updated successfully!')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.profile'))
 
     return render_template('profile.html')

@@ -1,8 +1,53 @@
+/* styles.css */
+
+/* Overall body styling */
 body {
-    background-color: #f8f9fa;
-  }
-  
-  h2 {
-    margin-top: 20px;
-  }
-  
+  background: #f9f9f9;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar styling */
+.navbar-dark.bg-dark {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Links hover effect */
+.nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #bbb;  /* Softer hover effect */
+}
+
+/* Buttons with smooth hover */
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Card hover effect */
+.card {
+  border: none;
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Avatar styling */
+.avatar-icon {
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.avatar-icon:hover {
+  transform: scale(1.1);
+}
