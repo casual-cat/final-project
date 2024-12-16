@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Item</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="data" class="form-label">Data</label>
+                <textarea class="form-control" name="data" rows="3">{{ item.data }}</textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+            <a class="btn btn-secondary" href="{{ url_for('main.home') }}">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
