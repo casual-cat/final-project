@@ -1,53 +1,75 @@
 /* styles.css */
 
-/* Overall body styling */
-body {
+/* Hero Section with a soft gradient background or pastel color */
+.hero-section {
+  width: 100%;
+  min-height: 60vh;
+  background: linear-gradient(45deg, #ffd6d6 0%, #ffbdbd 100%);
+  color: #333;
+  text-align: center;
+  padding: 60px 20px;
+  border-bottom-left-radius: 80px;
+  border-bottom-right-radius: 80px;
+  position: relative;
+}
+
+/* Modern button styling */
+.custom-btn {
+  background: #8e5eee;
+  border: none;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(142, 94, 238, 0.4);
+}
+
+/* Another example for .btn-success override (for the upload button) */
+.btn-success {
+  background-color: #ff8686 !important;
+  border-color: #ff8686 !important;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #ff5c5c !important;
+  border-color: #ff5c5c !important;
+  transform: translateY(-2px);
+}
+
+/* Card or list group hover effect */
+.list-group-item {
+  transition: box-shadow 0.2s ease;
+}
+
+.list-group-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Navbar brand style */
+.navbar-brand span {
+  color: #ff5c5c;
+}
+
+/* Adjust the default navbar toggler icon color */
+.navbar-light .navbar-toggler-icon {
+  filter: invert
+}
+
+/* Profile picture styling */
+img.rounded-circle {
+  object-fit: cover;
   background: #f9f9f9;
-  font-family: 'Poppins', sans-serif;
 }
 
-/* Navbar styling */
-.navbar-dark.bg-dark {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-/* Links hover effect */
-.nav-link {
-  transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #bbb;  /* Softer hover effect */
-}
-
-/* Buttons with smooth hover */
-.btn {
-  transition: all 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Card hover effect */
+/* Profile page card styling */
 .card {
   border: none;
   border-radius: 10px;
-  transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-/* Avatar styling */
-.avatar-icon {
-  border-radius: 50%;
-  transition: transform 0.2s ease;
-  cursor: pointer;
-}
-
-.avatar-icon:hover {
-  transform: scale(1.1);
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
