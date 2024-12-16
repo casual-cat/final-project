@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests (if you have tests)
+        run: |
+          # e.g., pytest or python -m unittest
+          echo "No tests yet, but this is where they'd run"
+
+      - name: Docker build
+        run: |
+          docker build -t devops-flask:${{ github.sha }} .
+      
+      - name: Docker tag
+        run: |
+          VERSION_TAG="v1.0.${{ github.run_number }}"
+          docker tag devops-flask:${{ github.sha }} devops-flask:${VERSION_TAG}
+          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
+      
+      - name: Docker login (example for GitHub Container Registry or AWS ECR)
+        if: always()
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          # OR for AWS:
+          # aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
+
+      - name: Docker push
+        run: |
+          docker push devops-flask:${{ github.sha }}
+          docker push devops-flask:${{ env.VERSION_TAG }}
+      
+      # Optional: Deploy step to AWS/ECS or Kubernetes
+      # - name: Deploy to AWS ECS
+      #   run: |
+      #       # AWS CLI commands or GitHub Action to push image to ECR and update ECS service
