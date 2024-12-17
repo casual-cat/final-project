@@ -11,6 +11,7 @@ login_manager = LoginManager()
 # Allowed file extensions for uploads
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -25,7 +26,7 @@ def create_app():
     login_manager.init_app(app)
 
     # Import models AFTER db is initialized
-    from app import models  
+    from app import models  # noqa: F401
 
     # Create the database tables
     with app.app_context():

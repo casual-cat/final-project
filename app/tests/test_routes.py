@@ -2,6 +2,7 @@
 import pytest
 from app import create_app, db
 
+
 @pytest.fixture
 def client():
     app = create_app()
@@ -10,6 +11,7 @@ def client():
         with app.app_context():
             db.create_all()
         yield client
+
 
 def test_home_redirect(client):
     response = client.get('/')
