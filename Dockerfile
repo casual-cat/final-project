@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Explicitly copy the static directory (already included by `COPY .`, but for clarity)
-COPY static /app/static
+COPY app/static /app/static
 
 # Set environment variables for Flask
 ENV FLASK_APP=run.py
