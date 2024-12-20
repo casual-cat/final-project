@@ -1,6 +1,11 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, flash, send_from_directory
-from flask_login import login_required, login_user, logout_user, current_user
+from flask import (
+    Blueprint, render_template, request, redirect,
+    url_for, flash, send_from_directory
+)
+from flask_login import (
+    login_required, login_user, logout_user, current_user
+)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -9,14 +14,17 @@ from app.models import User, Item
 
 main_bp = Blueprint('main', __name__)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 def allowed_file(filename):
     # Check if the extension is allowed
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @main_bp.route('/')
 def home():
@@ -24,6 +32,7 @@ def home():
         items = Item.query.filter_by(user_id=current_user.id).all()
         return render_template('home.html', items=items)
     return redirect(url_for('main.login'))
+
 
 @main_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,6 +46,7 @@ def login():
         else:
             flash('Invalid credentials!')
     return render_template('login.html')
+
 
 @main_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -56,37 +66,57 @@ def signup():
         return redirect(url_for('main.home'))
     return render_template('signup.html')
 
+
 @main_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.login'))
 
+
 @main_bp.route('/upload', methods=['POST'])
 @login_required
 def upload():
+<<<<<<< HEAD
     title = request.form.get('title')  # Get the title input
     data = request.form.get('data')  # Text data
     
+=======
+    data = request.form.get('data')  # Text data
+>>>>>>> c66602dc39fe5156b4358f9b86cdd4b44d023233
     file = request.files.get('file')
     filename = None
+
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
+<<<<<<< HEAD
         upload_path = os.path.join(main_bp.root_path, 'static', 'uploads', filename)
         os.makedirs(os.path.dirname(upload_path), exist_ok=True)
         file.save(upload_path)
     
     new_item = Item(user_id=current_user.id, title=title, data=data, filename=filename)
+=======
+        upload_path = os.path.join(
+            main_bp.root_path, 'static', 'uploads', filename
+        )
+        file.save(upload_path)
+
+    new_item = Item(user_id=current_user.id, data=data, filename=filename)
+>>>>>>> c66602dc39fe5156b4358f9b86cdd4b44d023233
     db.session.add(new_item)
     db.session.commit()
     flash('Item uploaded successfully!')
     return redirect(url_for('main.home'))
 
+
 @main_bp.route('/uploads/<filename>')
 @login_required
 def uploaded_file(filename):
-    # Serve the uploaded file
-    return send_from_directory(os.path.join(main_bp.root_path, 'static', 'uploads'), filename)
+    return send_from_directory(
+        os.path.join(main_bp.root_path, 'static', 'uploads'),
+        filename
+    )
+
 
 @main_bp.route('/delete_item/<int:item_id>', methods=['POST'])
 @login_required
@@ -94,8 +124,9 @@ def delete_item(item_id):
     item = Item.query.get(item_id)
     if item and item.user_id == current_user.id:
         if item.filename:
-            # Remove file from filesystem if it exists
-            file_path = os.path.join(main_bp.root_path, 'static', 'uploads', item.filename)
+            file_path = os.path.join(
+                main_bp.root_path, 'static', 'uploads', item.filename
+            )
             if os.path.exists(file_path):
                 os.remove(file_path)
         db.session.delete(item)
@@ -104,6 +135,7 @@ def delete_item(item_id):
     else:
         flash('Item not found or not yours.')
     return redirect(url_for('main.home'))
+
 
 @main_bp.route('/edit_item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
@@ -121,36 +153,32 @@ def edit_item(item_id):
 
     return render_template('edit_item.html', item=item)
 
-# routes.py
+
 @main_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     if request.method == 'POST':
         new_username = request.form.get('username')
         new_password = request.form.get('password')
-        
-        # Handle new username
+
         if new_username:
             existing_user = User.query.filter_by(username=new_username).first()
             if existing_user and existing_user.id != current_user.id:
                 flash('Username already taken by another user!')
                 return redirect(url_for('main.profile'))
             current_user.username = new_username
-        
-        # Handle new password
+
         if new_password:
             current_user.password = generate_password_hash(new_password)
-        
-        # Handle new avatar file
+
         file = request.files.get('avatar')
-        if file and allowed_file(file.filename):  # Use your existing allowed_file() helper
+        if file and allowed_file(file.filename):
             avatar_name = secure_filename(file.filename)
-            upload_path = os.path.join(main_bp.root_path, 'static', 'uploads', avatar_name)
-            # Make sure the folder exists
+            upload_path = os.path.join(
+                main_bp.root_path, 'static', 'uploads', avatar_name
+            )
             os.makedirs(os.path.dirname(upload_path), exist_ok=True)
             file.save(upload_path)
-            
-            # Update user's avatar_filename
             current_user.avatar_filename = avatar_name
 
         db.session.commit()
