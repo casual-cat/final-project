@@ -77,32 +77,19 @@ def logout():
 @main_bp.route('/upload', methods=['POST'])
 @login_required
 def upload():
-<<<<<<< HEAD
-    title = request.form.get('title')  # Get the title input
+    # Retrieve the title field from the form
+    title = request.form.get('title')
     data = request.form.get('data')  # Text data
-    
-=======
-    data = request.form.get('data')  # Text data
->>>>>>> c66602dc39fe5156b4358f9b86cdd4b44d023233
     file = request.files.get('file')
     filename = None
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-<<<<<<< HEAD
         upload_path = os.path.join(main_bp.root_path, 'static', 'uploads', filename)
-        os.makedirs(os.path.dirname(upload_path), exist_ok=True)
-        file.save(upload_path)
-    
-    new_item = Item(user_id=current_user.id, title=title, data=data, filename=filename)
-=======
-        upload_path = os.path.join(
-            main_bp.root_path, 'static', 'uploads', filename
-        )
         file.save(upload_path)
 
-    new_item = Item(user_id=current_user.id, data=data, filename=filename)
->>>>>>> c66602dc39fe5156b4358f9b86cdd4b44d023233
+    # Include the title in the new item
+    new_item = Item(user_id=current_user.id, title=title, data=data, filename=filename)
     db.session.add(new_item)
     db.session.commit()
     flash('Item uploaded successfully!')
@@ -123,18 +110,20 @@ def uploaded_file(filename):
 def delete_item(item_id):
     item = Item.query.get(item_id)
     if item and item.user_id == current_user.id:
+        # If there's a file associated with the item, delete it
         if item.filename:
             file_path = os.path.join(
                 main_bp.root_path, 'static', 'uploads', item.filename
             )
             if os.path.exists(file_path):
                 os.remove(file_path)
+        
         db.session.delete(item)
         db.session.commit()
-        flash('Item deleted.')
+        # Return JSON for AJAX
+        return {'status': 'success'}, 200
     else:
-        flash('Item not found or not yours.')
-    return redirect(url_for('main.home'))
+        return {'status': 'error', 'message': 'Item not found or not yours'}, 404
 
 
 @main_bp.route('/edit_item/<int:item_id>', methods=['GET', 'POST'])
