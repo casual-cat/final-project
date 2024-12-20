@@ -65,18 +65,18 @@ def logout():
 @main_bp.route('/upload', methods=['POST'])
 @login_required
 def upload():
-    # This route can handle both text and file upload
-    data = request.form.get('data')  # text data
+    title = request.form.get('title')  # Get the title input
+    data = request.form.get('data')  # Text data
     
     file = request.files.get('file')
     filename = None
     if file and allowed_file(file.filename):
-        # secure_filename is a security measure
         filename = secure_filename(file.filename)
         upload_path = os.path.join(main_bp.root_path, 'static', 'uploads', filename)
+        os.makedirs(os.path.dirname(upload_path), exist_ok=True)
         file.save(upload_path)
     
-    new_item = Item(user_id=current_user.id, data=data, filename=filename)
+    new_item = Item(user_id=current_user.id, title=title, data=data, filename=filename)
     db.session.add(new_item)
     db.session.commit()
     flash('Item uploaded successfully!')
