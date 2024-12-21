@@ -117,7 +117,6 @@ def delete_item(item_id):
             )
             if os.path.exists(file_path):
                 os.remove(file_path)
-        
         db.session.delete(item)
         db.session.commit()
         # Return JSON for AJAX

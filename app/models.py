@@ -19,4 +19,3 @@ class Item(db.Model):
     filename = db.Column(db.String(300))  # Uploaded file name (if any)
 
     user = db.relationship('User', backref='items', lazy=True)
-
