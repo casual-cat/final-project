@@ -18,6 +18,6 @@ jobs:
       - name: Update ECS Service
         run: |
           aws ecs update-service \
-            --cluster myCluster \
+            --cluster FinalCluster \
             --service myService \
             --force-new-deployment
