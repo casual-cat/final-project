@@ -1,0 +1,213 @@
+/* General Colors & Theme */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+}
+a:hover {
+  color: #8e5eee;
+}
+
+/* Hero Section */
+.hero-section {
+  width: 100%;
+  min-height: 70vh;
+  background: linear-gradient(120deg, #8e5eee 0%, #ff86c6 50%, #ff8686 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+  border-bottom-left-radius: 80px;
+  border-bottom-right-radius: 80px;
+  overflow: hidden;
+}
+
+/* Decorative floating shapes */
+.hero-section::before,
+.hero-section::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+  opacity: 0.3;
+}
+.hero-section::before {
+  width: 200px;
+  height: 200px;
+  background: #ffffff;
+  top: 30%;
+  left: 10%;
+  animation: floatHero 6s ease-in-out infinite;
+}
+.hero-section::after {
+  width: 300px;
+  height: 300px;
+  background: #ffffff;
+  top: 50%;
+  right: 5%;
+  animation: floatHero 7s ease-in-out infinite alternate;
+}
+
+@keyframes floatHero {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.hero-section p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+/* Custom Button */
+.custom-btn {
+  background: #ffffff;
+  color: #8e5eee;
+  border: none;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  margin: 0 10px;
+}
+.custom-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Upload Section */
+.upload-section {
+  background: linear-gradient(135deg, #fff7f0 0%, #fff0f9 100%);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.upload-section h3 {
+  color: #8e5eee;
+  font-weight: 700;
+}
+
+/* Form Fields */
+.form-label {
+  font-weight: 600;
+  color: #8e5eee;
+}
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+.form-control:focus {
+  border-color: #8e5eee;
+  box-shadow: 0 0 5px rgba(142, 94, 238, 0.3);
+}
+
+/* Upload Button */
+.btn-success {
+  background-color: #ff8686 !important;
+  border-color: #ff8686 !important;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-radius: 50px !important;
+  padding: 10px 20px;
+}
+.btn-success:hover {
+  background-color: #ff5c5c !important;
+  border-color: #ff5c5c !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 92, 92, 0.4);
+}
+
+/* Items List */
+.list-group-item {
+  background: #ffffff;
+  border: none;
+  border-left: 8px solid #8e5eee;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  padding: 20px;
+}
+.list-group-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Item Title */
+.list-group-item h5 {
+  font-weight: 700;
+  color: #8e5eee;
+  margin-bottom: 10px;
+}
+
+/* Pre Tags */
+.list-group-item pre {
+  background: #f7f7f7;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* Buttons in Items */
+.btn-sm.btn-danger {
+  background: #ff5c5c !important;
+  border: none;
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+.btn-sm.btn-danger:hover {
+  background: #ff3030 !important;
+}
+
+.btn-sm.btn-primary {
+  background: #8e5eee !important;
+  border: none;
+  border-radius: 20px;
+}
+.btn-sm.btn-primary:hover {
+  background: #7b4ee2 !important;
+}
+
+/* Heading Colors */
+h4 {
+  color: #8e5eee;
+  font-weight: 600;
+}
+.text-muted a {
+  color: #8e5eee !important;
+}
+
+/* Flash Message */
+.alert-info {
+  background: #e6e0fc;
+  border: none;
+  color: #333;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* Animate items on load */
+.item-row {
+  --animate-duration: 0.7s;
+}
+
+/* Navbar brand styling */
+.navbar-brand span {
+  color: #ff5c5c;
+}
