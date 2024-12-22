@@ -27,6 +27,11 @@ jobs:
           docker build -t gabidelcea/my-flask-app:${{ github.sha }} .
           docker push gabidelcea/my-flask-app:${{ github.sha }}
 
+      - name: Install dependencies and test
+        run: |
+            pip install -r requirements.txt
+            pytest
+
   deploy-to-ec2:
     needs: build-and-test
     runs-on: ubuntu-latest
