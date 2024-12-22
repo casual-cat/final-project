@@ -1,0 +1,23 @@
+		deploy-to-ec2:
+			needs: code-check-and-build
+		  runs-on: ubuntu-latest
+		
+		  steps:
+		    - name: Deploy to EC2
+		      uses: appleboy/ssh-action@v0.1.7
+		      with:
+		        host: ${{ secrets.EC2_HOST }}
+		        username: ec2-user
+		        key: ${{ secrets.EC2_SSH_KEY }}
+		        script: |
+		          # Start Docker if not running
+		          sudo systemctl start docker || true
+		          sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+		          sudo docker pull myrepo/myapp:latest
+		
+		          # Stop and remove old container if it exists
+		          sudo docker stop my-flask-app || true
+		          sudo docker rm my-flask-app || true
+		
+		          # Run the new container
+		          sudo docker run -d --name my-flask-app -p 80:5000 myrepo/myapp:latest
