@@ -7,10 +7,10 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v3
 
@@ -18,7 +18,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10 # Use a valid Python version
+          python-version: '3.10'
+          architecture: 'x64'
 
       # Step 3: Install dependencies and run tests
       - name: Install dependencies and test
@@ -37,36 +38,37 @@ jobs:
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
       # Step 6: Push Docker image to Docker Hub
-      - name: Push Docker Image
+      - name: Push Docker Image to Docker Hub
         run: |
           docker push gabidelcea/my-flask-app:${{ github.sha }}
           docker push gabidelcea/my-flask-app:latest
 
   deploy-to-ec2:
     needs: build-and-test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      # Step 2: Set up SSH key for EC2
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2-key.pem
+          chmod 600 ec2-key.pem
 
       # Step 3: Deploy to EC2
       - name: Deploy to EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-          docker pull gabidelcea/my-flask-app:latest
-          docker stop my-flask-app || true
-          docker rm my-flask-app || true
-          docker run -d --name my-flask-app -p 80:5000 -p 443:5000 \
-            -v /etc/letsencrypt:/etc/letsencrypt:ro \
-            gabidelcea/my-flask-app:latest
-          EOF
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull gabidelcea/my-flask-app:latest
+            docker stop my-flask-app || true
+            docker rm my-flask-app || true
+            docker run -d --name my-flask-app -p 80:5000 -p 443:5000 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              gabidelcea/my-flask-app:latest
