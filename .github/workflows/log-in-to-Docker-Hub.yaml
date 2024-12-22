@@ -1,0 +1,13 @@
+    ---
+    - name: Log in to Docker Hub
+      run: >
+        echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{
+        secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+    - name: Build Docker Image
+      run: |
+        docker build -t myrepo/myapp:${{ github.sha }} .
+        docker tag myrepo/myapp:${{ github.sha }} myrepo/myapp:latest
+    - name: Push Docker Image to Docker Hub
+      run: |
+        docker push myrepo/myapp:${{ github.sha }}
+        docker push myrepo/myapp:latest
