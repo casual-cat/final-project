@@ -1,7 +1,13 @@
-from app import create_app
+from flask import Flask
+from flask_sslify import SSLify
 
-app = create_app()
+app = Flask(__name__)
+sslify = SSLify(app)
+
+@app.route("/")
+def home():
+    return "Hello, HTTPS!"
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, ssl_context=('/etc/letsencrypt/live/gabi-final-project-devops.online/fullchain.pem', '/etc/letsencrypt/live/gabi-final-project-devops.online/privkey.pem'))
+    app.run(host="0.0.0.0", port=5000)  # Remove `ssl_context`
 
