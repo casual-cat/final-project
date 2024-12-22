@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables
-USERNAME="your-dockerhub-username"
-REPO="your-repository-name"
+USERNAME="gabidelcea"
+REPO="my-flask-app"
 TAG="latest"
 
 # Log in to Docker Hub
