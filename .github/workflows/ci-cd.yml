@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout Code
+      # Step 1: Checkout code
       - name: Checkout Code
         uses: actions/checkout@v3
 
@@ -26,37 +26,47 @@ jobs:
           pip install -r requirements.txt
           pytest
 
-      # Step 4: Log in to Docker Hub
+      # Step 4: Build Docker image
+      - name: Build Docker Image
+        run: |
+          docker build -t gabidelcea/my-flask-app:${{ github.sha }} .
+          docker tag gabidelcea/my-flask-app:${{ github.sha }} gabidelcea/my-flask-app:latest
+
+      # Step 5: Log in to Docker Hub
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      # Step 5: Build and Push Docker Image
-      - name: Build and Push Docker Image
+      # Step 6: Push Docker image to Docker Hub
+      - name: Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:${{ github.sha }} .
-          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:${{ github.sha }} ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:latest
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:latest
+          docker push gabidelcea/my-flask-app:${{ github.sha }}
+          docker push gabidelcea/my-flask-app:latest
 
   deploy-to-ec2:
     needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout Code
+      # Step 1: Checkout code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: SSH into EC2 and Pull New Docker Image
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v0.1.7
+      # Step 2: Set up AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:latest
-            docker stop my-flask-app || true
-            docker rm my-flask-app || true
-            docker run -d --name my-flask-app -p 80:5000 -p 443:5000 ${{ secrets.DOCKER_HUB_USERNAME }}/my-flask-app:latest
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 3: Deploy to EC2
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          docker pull gabidelcea/my-flask-app:latest
+          docker stop my-flask-app || true
+          docker rm my-flask-app || true
+          docker run -d --name my-flask-app -p 80:5000 -p 443:5000 \
+            -v /etc/letsencrypt:/etc/letsencrypt:ro \
+            gabidelcea/my-flask-app:latest
+          EOF
