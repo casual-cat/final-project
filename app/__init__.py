@@ -2,7 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from app.config import Config
+from flask_cors import CORS
 import os
+
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["http://gabi-final-project-devops.online", "https://gabi-final-project-devops.online"]}})
 
 # Initialize extensions
 db = SQLAlchemy()
