@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-5 animate__animated animate__fadeInUp">
-    <h2 class="mb-4">Edit Item</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6 animate__animated animate__fadeInUp">
-            <form method="POST" class="animate__animated animate__fadeInUp">
-                <div class="mb-3">
-                    <label for="data" class="form-label">Data</label>
-                    <textarea class="form-control" name="data" rows="3">{{ item.data }}</textarea>
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary" type="submit">Save Changes</button>
-                    <a class="btn btn-secondary" href="{{ url_for('main.home') }}">Cancel</a>
-                </div>
-            </form>
-        </div>
+<div class="container mt-5">
+  <h2>Edit Item</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" class="form-control" name="title" id="title" value="{{ item.title }}">
     </div>
+    <div class="mb-3">
+      <label for="data" class="form-label">Data</label>
+      <textarea class="form-control" name="data" id="data" rows="4">{{ item.data }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary">Cancel</a>
+  </form>
 </div>
 {% endblock %}
