@@ -53,7 +53,8 @@ jobs:
 
       # Step 2: Debug Hostname
       - name: Debug Hostname
-        run: echo "Connecting to host: ${{ secrets.EC2_HOST }}"
+        run: |
+          echo "Connecting to host: ${{ secrets.EC2_HOST }}"
 
       # Step 3: Set up SSH Key
       - name: Set up SSH Key
