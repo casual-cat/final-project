@@ -10,8 +10,8 @@ def create_app():
     app = Flask(__name__)
 
     # Configuration
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://username:password@localhost/final_project_db"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:a1a2a3@44.211.155.253/final_project_db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["SECRET_KEY"] = "your-secret-key"
 
     # Initialize extensions
