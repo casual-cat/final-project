@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body style="font-family: 'Poppins', sans-serif; background: #f9f9f9;">
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 animate__animated animate__fadeInDown">
     <a class="navbar-brand fs-3 fw-bold" href="{{ url_for('main.home') }}">
@@ -28,31 +29,31 @@
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav align-items-center">
         {% if current_user.is_authenticated %}
-        <li class="nav-item mx-2">
-          <a class="nav-link fw-semibold" href="{{ url_for('main.profile') }}">Profile</a>
-        </li>
-        <li class="nav-item mx-2">
-          <a class="nav-link fw-semibold" href="{{ url_for('main.logout') }}">Logout</a>
-        </li>
-        <!-- Display User Profile Picture -->
-        <li class="nav-item ms-3">
-          {% if current_user.avatar_filename %}
-          <img src="{{ url_for('main.uploaded_file', filename=current_user.avatar_filename) }}" 
-               alt="Profile Picture" width="40" height="40" 
-               class="rounded-circle border border-light shadow-sm">
-          {% else %}
-          <img src="{{ url_for('static', filename='css/default-avatar.png') }}" 
-               alt="Default Avatar" width="40" height="40" 
-               class="rounded-circle border border-light shadow-sm">
-          {% endif %}
-        </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link fw-semibold" href="{{ url_for('main.profile') }}">Profile</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link fw-semibold" href="{{ url_for('main.logout') }}">Logout</a>
+          </li>
+          <!-- Display User Profile Picture -->
+          <li class="nav-item ms-3">
+            {% if current_user.avatar_filename %}
+            <img src="{{ url_for('main.uploaded_file', filename=current_user.avatar_filename) }}" 
+                 alt="Profile Picture" width="40" height="40" 
+                 class="rounded-circle border border-light shadow-sm">
+            {% else %}
+            <img src="{{ url_for('static', filename='css/default-avatar.png') }}"
+                 alt="Default Avatar" width="40" height="40"
+                 class="rounded-circle border border-light shadow-sm">
+            {% endif %}
+          </li>
         {% else %}
-        <li class="nav-item mx-2">
-          <a class="nav-link fw-semibold" href="{{ url_for('main.login') }}">Login</a>
-        </li>
-        <li class="nav-item mx-2">
-          <a class="nav-link fw-semibold" href="{{ url_for('main.signup') }}">Sign Up</a>
-        </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link fw-semibold" href="{{ url_for('main.login') }}">Login</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link fw-semibold" href="{{ url_for('main.signup') }}">Sign Up</a>
+          </li>
         {% endif %}
       </ul>
     </div>

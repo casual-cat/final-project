@@ -1,13 +1,10 @@
-from flask import Flask
-from flask_sslify import SSLify
+from app import create_app, db
 
-app = Flask(__name__)
-sslify = SSLify(app)
+app = create_app()
 
-@app.route("/")
-def home():
-    return "Hello, HTTPS!"
+# Automatically create tables
+with app.app_context():
+    db.create_all()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)  # Remove `ssl_context`
-
+    app.run(host="0.0.0.0", port=5000)
